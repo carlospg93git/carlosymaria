@@ -4,8 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // For custom domains, use an empty base path
-  base: "",
+  // For custom domains on GitHub Pages
+  base: "/",
   server: {
     host: "::",
     port: 8080,
@@ -18,7 +18,8 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    assetsDir: "assets",
+    // This is critical for GitHub Pages with custom domains
+    assetsInlineLimit: 0,
     emptyOutDir: true,
     sourcemap: false
   }
