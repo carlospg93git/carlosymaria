@@ -4,8 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // For GitHub Pages with custom domain
-  base: "/",
+  // Empty base path for GitHub Pages with custom domain
+  base: "",
   server: {
     host: "::",
     port: 8080,
@@ -18,13 +18,12 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    // Use a single file bundle approach to avoid MIME type issues
+    // Simplify the build output to avoid MIME type issues
     cssCodeSplit: false,
     rollupOptions: {
       output: {
-        // Bundle everything into a single file to avoid MIME type issues
-        manualChunks: undefined,
-        entryFileNames: 'assets/[name].js',
+        // Use a simpler naming convention
+        entryFileNames: 'assets/index.js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]'
       }
