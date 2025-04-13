@@ -4,13 +4,11 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
+    minify: true,
+    cssMinify: true,
     rollupOptions: {
-      output: {
-        assetFileNames: 'assets/[name].[ext]',
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js'
+      input: {
+        main: './index.html'
       }
     }
   },
