@@ -9,7 +9,7 @@ interface PageHeaderProps {
 const PageHeader = ({ title, subtitle }: PageHeaderProps) => {
   return (
     <div className="mb-6 text-center">
-      <h1 className="text-3xl font-semibold text-wedding-primary">{title}</h1>
+      <h1 className="text-5xl font-italianno text-wedding-primary">{title}</h1>
       {subtitle && (
         <p className="text-wedding-neutral mt-1">{subtitle}</p>
       )}

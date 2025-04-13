@@ -53,15 +53,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				// Custom wedding colors
+				// Custom wedding colors - updated to green/nature tones
 				wedding: {
-					primary: '#9b87f5',
-					secondary: '#7E69AB',
-					light: '#D6BCFA',
-					peach: '#FDE1D3',
-					background: '#F1F0FB',
-					text: '#1A1F2C',
-					neutral: '#8E9196',
+					primary: '#4CAF50',    // Main green
+					secondary: '#2E7D32',  // Darker green
+					light: '#C8E6C9',      // Light green
+					peach: '#F1F8E9',      // Very light green/cream
+					background: '#F9FBF6', // Light cream background
+					text: '#1E3A29',       // Dark green text
+					neutral: '#5D6B5D',    // Neutral green-gray
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -77,6 +77,7 @@ export default {
 			fontFamily: {
 				'playfair': ['Playfair Display', 'serif'],
 				'montserrat': ['Montserrat', 'sans-serif'],
+				'italianno': ['Italianno', 'cursive'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

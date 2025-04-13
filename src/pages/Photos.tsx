@@ -2,14 +2,17 @@
 import PageLayout from "@/components/layout/PageLayout";
 import PageHeader from "@/components/layout/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
-import { Camera, Image, Upload, Trash2 } from "lucide-react";
+import { Camera, Image, Upload, Trash2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { uploadMultipleFilesToS3 } from "@/services/s3Service";
 
 const Photos = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -33,18 +36,39 @@ const Photos = () => {
     setPreviews(newPreviews);
   };
   
-  const handleUpload = () => {
-    // This would normally connect to a server
-    // For now, we'll just show a success message
-    toast({
-      title: "Photos Uploaded",
-      description: `${selectedFiles.length} photos have been uploaded successfully.`,
-    });
+  const openNativeFilePicker = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  
+  const handleUpload = async () => {
+    if (selectedFiles.length === 0) return;
     
-    // Clear selected files after "upload"
-    previews.forEach(url => URL.revokeObjectURL(url));
-    setSelectedFiles([]);
-    setPreviews([]);
+    setIsUploading(true);
+    try {
+      // This would connect to S3 in a real implementation
+      await uploadMultipleFilesToS3(selectedFiles);
+      
+      toast({
+        title: "Photos Uploaded",
+        description: `${selectedFiles.length} files have been uploaded successfully.`,
+      });
+      
+      // Clear selected files after "upload"
+      previews.forEach(url => URL.revokeObjectURL(url));
+      setSelectedFiles([]);
+      setPreviews([]);
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast({
+        title: "Upload Failed",
+        description: "There was an error uploading your files. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -58,36 +82,36 @@ const Photos = () => {
         <CardContent className="pt-6">
           <div className="flex items-center mb-4">
             <Camera className="w-5 h-5 text-wedding-primary mr-3" />
-            <h3 className="font-semibold text-lg">Upload Photos</h3>
+            <h3 className="font-semibold text-lg">Upload Photos & Videos</h3>
           </div>
           
           <p className="text-sm text-wedding-neutral mb-4">
-            We'd love for you to share your photos from our wedding! Select images from your 
+            We'd love for you to share your photos and videos from our wedding! Select media files from your 
             phone to upload them to our shared gallery.
           </p>
           
           <div className="border-2 border-dashed border-wedding-light rounded-lg p-4 text-center mb-4">
             <Image className="w-10 h-10 text-wedding-light mx-auto mb-2" />
             <p className="text-sm text-wedding-neutral mb-2">
-              Tap to select photos
+              Tap to select photos and videos
             </p>
             <input 
               type="file" 
               multiple 
-              accept="image/*" 
+              accept="image/*,video/*" 
               className="hidden" 
               id="photo-upload"
+              ref={fileInputRef}
               onChange={handleFileSelect}
             />
-            <label htmlFor="photo-upload">
-              <Button 
-                variant="outline" 
-                className="border-wedding-primary text-wedding-primary hover:bg-wedding-light"
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                Choose Photos
-              </Button>
-            </label>
+            <Button 
+              variant="outline" 
+              className="border-wedding-primary text-wedding-primary hover:bg-wedding-light"
+              onClick={openNativeFilePicker}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Choose Media Files
+            </Button>
           </div>
           
           {selectedFiles.length > 0 && (
@@ -95,11 +119,19 @@ const Photos = () => {
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {previews.map((preview, index) => (
                   <div key={index} className="relative">
-                    <img 
-                      src={preview} 
-                      alt="Preview" 
-                      className="w-full h-24 object-cover rounded-md"
-                    />
+                    <div className="relative w-full h-24">
+                      {selectedFiles[index].type.startsWith('image/') ? (
+                        <img 
+                          src={preview} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-md">
+                          <Video className="w-8 h-8 text-wedding-primary" />
+                        </div>
+                      )}
+                    </div>
                     <button 
                       className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-sm"
                       onClick={() => removeFile(index)}
@@ -113,8 +145,9 @@ const Photos = () => {
               <Button 
                 className="w-full bg-wedding-primary hover:bg-wedding-secondary"
                 onClick={handleUpload}
+                disabled={isUploading}
               >
-                Upload {selectedFiles.length} Photos
+                {isUploading ? "Uploading..." : `Upload ${selectedFiles.length} Files`}
               </Button>
             </>
           )}

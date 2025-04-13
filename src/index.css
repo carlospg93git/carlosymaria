@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Italianno&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -80,7 +79,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-playfair;
+    @apply font-italianno;
   }
 }
 
@@ -106,7 +105,6 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #9b87f5;
+  background: #4CAF50;
   border-radius: 10px;
 }
-
