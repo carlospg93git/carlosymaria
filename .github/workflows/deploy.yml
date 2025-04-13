@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to Netlify
 
 on:
   push:
@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - uses: actions/checkout@v3
@@ -25,11 +23,17 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Setup Custom Domain
-        run: echo "carlosymaria.es" > dist/CNAME
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish-dir: './dist'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: 'Deploy from GitHub Actions'
+          enable-pull-request-comment: false
+          enable-commit-comment: false
+          overwrites-pull-request-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
