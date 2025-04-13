@@ -44,22 +44,26 @@ jobs:
           # Create .nojekyll to disable Jekyll processing
           touch dist/.nojekyll
           
-          # Copy redirect script to the dist folder
-          cp -f public/redirect.js dist/
-          
-          # Add a simple HTML file to test MIME types
-          cat > dist/test-mime.html << 'EOL'
+          # Create a simple static HTML file to test that everything works
+          cat > dist/test-static.html << 'EOL'
           <!DOCTYPE html>
           <html>
           <head>
-            <title>MIME Type Test</title>
+            <title>Static Test Page</title>
+            <style>
+              body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+              h1 { color: #333; }
+              .success { color: green; font-weight: bold; }
+            </style>
           </head>
           <body>
-            <h1>Testing MIME Types</h1>
+            <h1>María & Carlos Wedding Website</h1>
+            <p>This is a static test page to verify that the website is working correctly.</p>
+            <p class="success">If you can see this page, the deployment is successful!</p>
             <script>
-              document.write('<p>JavaScript is working!</p>');
+              document.write('<p>JavaScript is working correctly!</p>');
             </script>
-            <script src="assets/index.js" type="text/javascript"></script>
+            <p><a href="/">Go to the main website</a></p>
           </body>
           </html>
           EOL
