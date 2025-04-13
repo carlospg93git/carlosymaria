@@ -1,4 +1,3 @@
-
 import PageLayout from "@/components/layout/PageLayout";
 import PageHeader from "@/components/layout/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -47,7 +46,6 @@ const Photos = () => {
     
     setIsUploading(true);
     try {
-      // This would connect to S3 in a real implementation
       await uploadMultipleFilesToS3(selectedFiles);
       
       toast({
@@ -55,7 +53,7 @@ const Photos = () => {
         description: `${selectedFiles.length} files have been uploaded successfully.`,
       });
       
-      // Clear selected files after "upload"
+      // Clear selected files after upload
       previews.forEach(url => URL.revokeObjectURL(url));
       setSelectedFiles([]);
       setPreviews([]);
