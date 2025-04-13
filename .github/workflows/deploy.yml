@@ -38,6 +38,15 @@ jobs:
 
       - name: Configure custom domain
         run: echo "carlosymaria.es" > dist/CNAME
+        
+      - name: Add mime.types file for proper MIME types
+        run: |
+          cat > dist/.htaccess << 'EOL'
+          AddType application/javascript .js
+          AddType application/javascript .mjs
+          AddType text/javascript .js
+          AddType text/javascript .mjs
+          EOL
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4

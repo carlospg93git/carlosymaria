@@ -4,7 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "", // Empty string works better for GitHub Pages with custom domains
+  // Use relative path for GitHub Pages with custom domain
+  base: "./",
   server: {
     host: "::",
     port: 8080,
@@ -20,9 +21,12 @@ export default defineConfig({
     assetsDir: "assets",
     emptyOutDir: true,
     sourcemap: false,
+    // Ensure proper MIME types for JavaScript modules
     rollupOptions: {
       output: {
-        manualChunks: undefined
+        entryFileNames: "assets/[name]-[hash].js",
+        chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash].[ext]"
       }
     }
   }
