@@ -4,8 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // Empty base path for GitHub Pages with custom domain
-  base: "",
+  // Use root path for Netlify
+  base: "/",
   server: {
     host: "::",
     port: 8080,
@@ -18,16 +18,7 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    // Critical settings for GitHub Pages compatibility
-    cssCodeSplit: false,
-    // Format as UMD to avoid MIME type issues
-    rollupOptions: {
-      output: {
-        format: 'umd',
-        entryFileNames: 'assets/index.js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
-      }
-    }
+    // Let Netlify handle MIME types
+    sourcemap: true
   }
 });
