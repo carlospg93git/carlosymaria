@@ -39,36 +39,29 @@ jobs:
       - name: Configure custom domain
         run: echo "carlosymaria.es" > dist/CNAME
         
-      - name: Add files for proper MIME types
+      - name: Add files for proper GitHub Pages configuration
         run: |
           # Create .nojekyll to disable Jekyll processing
           touch dist/.nojekyll
           
-          # Create a _headers file for Netlify-like MIME type control
-          cat > dist/_headers << 'EOL'
-          /*
-            Content-Type: text/html; charset=utf-8
-          *.js
-            Content-Type: application/javascript; charset=utf-8
-          *.css
-            Content-Type: text/css; charset=utf-8
-          EOL
+          # Copy redirect script to the dist folder
+          cp -f public/redirect.js dist/
           
-          # Create a vercel.json file for MIME type control
-          cat > dist/vercel.json << 'EOL'
-          {
-            "headers": [
-              {
-                "source": "/(.*).js",
-                "headers": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/javascript"
-                  }
-                ]
-              }
-            ]
-          }
+          # Add a simple HTML file to test MIME types
+          cat > dist/test-mime.html << 'EOL'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>MIME Type Test</title>
+          </head>
+          <body>
+            <h1>Testing MIME Types</h1>
+            <script>
+              document.write('<p>JavaScript is working!</p>');
+            </script>
+            <script src="assets/index.js" type="text/javascript"></script>
+          </body>
+          </html>
           EOL
 
       - name: Deploy

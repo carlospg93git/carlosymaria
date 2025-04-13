@@ -18,11 +18,12 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    // Simplify the build output to avoid MIME type issues
+    // Critical settings for GitHub Pages compatibility
     cssCodeSplit: false,
+    // Format as UMD to avoid MIME type issues
     rollupOptions: {
       output: {
-        // Use a simpler naming convention
+        format: 'umd',
         entryFileNames: 'assets/index.js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]'
